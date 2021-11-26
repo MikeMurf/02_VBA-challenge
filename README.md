@@ -10,6 +10,7 @@ https://monash.bootcampcontent.com/monash-coding-bootcamp/monu-virt-data-11-2021
 2   "WallStMM-bonus"  contains the VBA code for the Bonus part of the VBA Challenge  in a standard text file.
 3   "WallStMM 2014 screenshot", "WallStMM 2015 screenshot" and "WallStMM 2016 screenshot" show that the VBA code for the Moderate part and
     the Bonus part of the VBA-challenge produce the required results.
+    
 Github "push" is limited to 50KB in the standard version of Github installed via the Bootcamp installation instructions so we are unable to  
 load the "Multiple_year_stock_data" file, the file required for the analysis, which is approximately 96KB.
 
