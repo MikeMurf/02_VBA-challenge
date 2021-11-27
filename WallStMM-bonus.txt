@@ -1,0 +1,74 @@
+
+Sub WallStMM2()
+
+'   CODE FOR THE BONUS PART OF THE VBA CHALLENGE
+
+For Each Ws In Worksheets
+
+'   define variables for the bonus part of the VBA Challenge
+Dim GreatestPercentIncrease As Double
+Dim GreatestPercentDecrease As Double
+Dim GreatestTotalVolume As Double
+
+'   define Ws.Range of tickers
+Dim Tickers As Range
+Dim TickerName As String
+
+'   initialise variables for the bonus part of the VBA Challenge
+GreatestPercentIncrease = 0
+GreatestPercentDecrease = 0
+GreatestTotalVolume = 0
+
+'   define summary table headers
+Ws.Range("I1").Value = "Ticker"
+Ws.Range("J1").Value = "Yearly Change"
+Ws.Range("K1").Value = "Percent Change"
+Ws.Range("L1").Value = "Total Stock Volume"
+
+'   define headers for the bonus part of the VBA Challenge
+Ws.Range("O2").Value = "Greatest % Increase"
+Ws.Range("O3").Value = "Greatest % Decrease"
+Ws.Range("O4").Value = "Greatest Total Volume"
+Ws.Range("P1").Value = "Ticker"
+Ws.Range("Q1").Value = "Value"
+       
+
+'   find last row in tickers
+LastRow = Ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+'   loop through tickers looking for Greatest % Increase, Greatest % Decrease and Greatest Total Volume
+
+For RowPointer = 2 To (LastRow + 1)
+
+If Ws.Range("K" & RowPointer).Value > Ws.Range("Q2").Value Then
+    Ws.Range("Q2").Value = Ws.Range("K" & RowPointer).Value
+    Ws.Range("P2").Value = Ws.Range("I" & RowPointer).Value
+End If
+
+If Ws.Range("K" & RowPointer).Value < Ws.Range("Q3").Value Then
+    Ws.Range("Q3").Value = Ws.Range("K" & RowPointer).Value
+    Ws.Range("P3").Value = Ws.Range("I" & RowPointer).Value
+End If
+
+If Ws.Range("L" & RowPointer).Value > Ws.Range("Q4").Value Then
+    Ws.Range("Q4").Value = Ws.Range("L" & RowPointer).Value
+    Ws.Range("P4").Value = Ws.Range("I" & RowPointer).Value
+End If
+
+Next RowPointer
+
+' Format Double To Include % Symbol And Two Decimal Places
+Ws.Range("Q2").NumberFormat = "0.00%"
+Ws.Range("Q3").NumberFormat = "0.00%"
+
+'   format bonus table Ws.Columns to auto fit
+Ws.Columns("o:q").EntireColumn.AutoFit
+    
+Next Ws
+
+End Sub
+
+
+
+
+

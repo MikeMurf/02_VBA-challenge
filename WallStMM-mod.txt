@@ -1,0 +1,103 @@
+
+Sub WallStMM1()
+
+'   CODE FOR THE MODERATE PART OF THE VBA CHALLENGE
+
+'   define yearly counters and pointers to tickers, previous tickers and summary table
+Dim YearlyOpen As Double
+Dim YearlyClose As Double
+Dim YearlyChange As Double
+Dim PercentChange As Double
+Dim YearlyVolume As Double
+Dim RowPointer As Long
+Dim SummaryTablePointer As Long
+Dim PreviousTickerPointer As Long
+Dim LastRow As Long
+Dim NewTickerFlag As Single
+
+'   initialise open and close values, counters and pointer to summary table
+YearlyOpen = 0
+YearlyClose = 0
+YearlyChange = 0
+PercentChange = 0
+YearlyVolume = 0
+SummaryTablePointer = 2
+RowPointer = 2
+PreviousTickerPointer = 1
+NewTickerFlag = 1
+
+'   define summary table headers
+Range("I1").Value = "Ticker"
+Range("J1").Value = "Yearly Change"
+Range("K1").Value = "Percent Change"
+Range("L1").Value = "Total Stock Volume"
+    
+'   find last row in tickers
+LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+'   loop through tickers accumulating totals in summary table when tickers change
+For RowPointer = 2 To (LastRow + 1)
+    If Cells(RowPointer + 1, 1).Value <> Cells(RowPointer, 1) Then
+        Range("i" & SummaryTablePointer).Value = TickerName
+        YearlyClose = Range("f" & PreviousTickerPointer + 1)
+        YearlyVolume = YearlyVolume + Cells(RowPointer, 7)
+        Range("l" & SummaryTablePointer).Value = YearlyVolume
+'   calculate the yearly change and its % and check to see if yearly open is 0 to avoid division by zero
+        If YearlyOpen = 0 Then
+           PercentChange = 0
+           YearlyChange = YearlyClose
+           Range("j" & SummaryTablePointer).Value = YearlyChange
+           Range("k" & SummaryTablePointer).Value = PercentChange
+           Range("k" & SummaryTablePointer).NumberFormat = "0.00%"
+        Else
+           YearlyChange = YearlyClose - YearlyOpen
+           PercentChange = (YearlyChange / YearlyOpen)
+           Range("j" & SummaryTablePointer).Value = YearlyChange
+           Range("k" & SummaryTablePointer).Value = PercentChange
+           Range("k" & SummaryTablePointer).NumberFormat = "0.00%"
+        End If
+'   format the yearly change - red if it's 0 or negative, green if it's positive
+        If Range("j" & SummaryTablePointer) <= 0 Then
+           Range("j" & SummaryTablePointer).Interior.ColorIndex = 3
+        Else
+           Range("j" & SummaryTablePointer).Interior.ColorIndex = 4
+        End If
+'  reset counters and increment summary table pointerand previous ticket pointer
+        YearlyClose = 0
+        YearlyChange = 0
+        PercentChange = 0
+        YearlyVolume = 0
+        SummaryTablePointer = SummaryTablePointer + 1
+        PreviousTickerPointer = PreviousTickerPointer + 1
+'  store yearly open
+        YearlyOpen = Cells(RowPointer + 1, 3)
+'   set new ticker flag
+        NewTickerFlag = 1
+        
+    Else
+      
+'   if it's the first ticker in a Range of the same tickers save YearlyOpen
+'   accumulate YearlyVolume while it is the same ticker and increment PreviousTickerPointer
+        If NewTickerFlag = 1 Then
+           NewTickerFlag = 0
+           TickerName = Cells(RowPointer, 1)
+           YearlyOpen = Cells(RowPointer, 3)
+           PreviousTickerPointer = PreviousTickerPointer + 1
+        Else
+        PreviousTickerPointer = PreviousTickerPointer + 1
+        End If
+        YearlyVolume = YearlyVolume + Cells(RowPointer, 7)
+        
+    End If
+    
+Next RowPointer
+
+'   format Columns to fit column headers
+Columns("j:l").EntireColumn.AutoFit
+
+End Sub
+
+
+
+
+
